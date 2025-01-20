@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3DSpace</title>
+  <script type="module" crossorigin src="/assets/index-bfbaf2ed.js"></script>
+  <link rel="stylesheet" href="/assets/index-321bba86.css">
+</head>
+
+<body>
+<header>
+    <div class="logo-container">
+        <img class="logo-s" src="/assets/logowsk-f661060c.png" alt="Logo" />
+    </div>
+    <!-- Icona menu (visibile solo su mobile) -->
+    <div class="menu-icon" id="menu-icon">
+        <img class="menu-icon-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJLSURBVHgB7ZmLcdswDIb/dIJ2A23QbFBtUG8gbdB0AqsTNBvYncDNBEkm8GUCewN7AwQM6QtDgSYlEcn5ou8OZ0t8ATQJAjQwMzOjAhE1LAeWnfmOS8MpfuIAJa6ghNH6zUAMFPiCC+dzGMCr4SvLkuWeZQEluO+aZcOyMmOiFK5Dn+aMAn9ZttTn3pXVkbZNUL9DQQM2gkKNV94GXieFqdueUf7FYJTCzaxER/JsDzHkV6Ss7FIlO8vvRQsNMowwJ+8ty4Kl8tpV7t2a0rTQhAe4iQxs9knSczhjYoZ00IbkzXqDgZDdPyFbaELyEuowksiv2UILYfZXmAj1XfQOGpDsSitMhOwpfwj6rXPbD4mFQr+85gBzj4lwH0f++JcYK8oQA74Hz3cox0Pw/ANjoddMKkWFQpB1rSl2JMRgV0JnZhNVSFA6QTEaZlQ78rDf/BfSEioXxpbnGL6QDPjNskeCwkvoOqOaUf4PxkL9qLNYtEg2TvLJDqWHeKHH4LlGOX4Gz08oDfUPMuOpJu+XiAeqoQH1Q4kNJkL9dFUnlHCDScHc4EjU628p9NdCE5JTyCUGQnIqqTf73sBLkllRhmslG7xtIn2M/jVzlW8ozYqsW7z22p1SSnOtkgpTdC6CM5UvRVkjqH/QnDAZ1Y7GY/ZTFykrd61C9lYtpPXKp15sSd7tP0ohzFIbqWcOu9uIwVtXVkfahkZMTlf9zo3nWJP1HnVmmzdktlk4482EZZ3y8x8cH81swBn87GmPS4NeXeuBtAO0mZlPzDO7UcK29mkUZwAAAABJRU5ErkJggg==" alt="Menu">
+    </div>
+    <!-- Menu -->
+    <nav class="menu" id="menu">
+        <button id="day-mode">Giorno</button>
+        <button id="sunset-mode">Tramonto</button>
+        <button id="night-mode">Notte</button>
+    </nav>
+</header>
+
+    <div id="fade-screen"></div> <!-- Overlay per il fade-out -->
+
+    <div id="loading-screen">
+        <div class="loader">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+    </div>
+
+    <div id="scene-container"></div>
+
+    
+</body>
+<footer>
+    <div>
+        <img class="logo-f" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAA+CAYAAABOU8kiAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAKySURBVHgBxVkBkeMwDDSEQiiEQgiEQgiDL4MegysDP4M+A0M4CILwEPasJuklaWKvYqe3M57pzUXqai1ZcuNcAQAc4wpxef3sfgPxi//E9R8/kLgu7l0YqbAG2V2dBRVSuMZ1cDVBqJBSp3U10EfGqrAGj63bFQ2buL5QDwJLMseHD3F9ks5VqY+etJA2+tyRUYF1GOYOe1IsrpgnM+wqXBLBWBJbMCQzbCoo/jlui1uD3081sCakKtKSZFSdv4RPcbCpMYYHWZLIq1NE5OEAddRZJXKL6wS+CjzK1Hkhop+bhUgkz4U/sPCqzoSIqnBIGLPqBPDqDBX7NfzRkIasOoqrI4GtXVq3AFwjFLxhNlF17uBAq7P4ReRz7AkqsKiDru8Mkd4ZY/An6EMd5HICy6NgssnN7C3qNGsRBcL4SJCxqOOfPmEbiBVU4sGmznlrrxFw6mi+3Rh/pU2PVeeEjd1Xt8qjJPGWCX1YiAT0ssOWeDpqZo9qLLeJCZHVMoUt8VpHAFN1nkTuuWiwtSw5dcTc+cAP22JQp3FbgR2mtxIyS4lXpM78C87oqqcln687vWG553jYEi+HdBNFuufIDurIS4ConHiw3X+vY8MLeOwxn4StUQB15xMpiWJAjflESqKYOEKZOpIzPOM96ghjZ6mqQZ0T4VPVuT2JaNQEF+t1U8HOJ01c3vVG+qvR0RFAV+pCktHnWsavmxmye2xNZp8NdCWKxhGArdQlqQ5KonCmK0PaL0qimPqxJPOrX9KQuoz3/iyl/uMXtkOLTeYAHtpED2NZ2SoQJNRBN9dYEFzhPvsxIXTXygAe+XECtilLS/gKGzzYawxsv5GxEGy9w8A+nyzh8YLJlQL2I32MgNoXLNhfmTVuTyCfzPr/uu98E2SWSj1U3wYDIU1mnWdaV4BvU5rQux/CC4oAAAAASUVORK5CYII=" alt="Footer Logo" />
+        Powered by francescogalli.design
+    </div>
+</footer>
+
+</html>

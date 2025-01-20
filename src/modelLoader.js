@@ -6,7 +6,7 @@ export function loadModel(scene, diffuseMap, normalMap) {
     return new Promise((resolve, reject) => {
         const loader = new FBXLoader();
         loader.load(
-            './models/Cattedrale_decimata.fbx',
+            'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata.fbx',
             (fbx) => {
                 const model = fbx;
                 model.traverse((child) => {
