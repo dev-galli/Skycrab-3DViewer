@@ -46,8 +46,8 @@ export function initializeScene() {
 
         const manager = new THREE.LoadingManager();
         const textureLoader = new THREE.TextureLoader(manager);
-        const diffuseMap = textureLoader.load('/models/low_Cattedrale_decimata_u0_v0_diffuse.png');
-        const normalMap = textureLoader.load('/models/low_Cattedrale_decimata_u0_v0_normal.png');
+        const diffuseMap = textureLoader.load('/public/models/low_Cattedrale_decimata_u0_v0_diffuse.png');
+        const normalMap = textureLoader.load('/public/models/low_Cattedrale_decimata_u0_v0_normal.png');
 
         manager.onLoad = () => {
             loadModel(scene, diffuseMap, normalMap).then((loadedModel) => {
