@@ -27,7 +27,7 @@ const normalMap = textureLoader.load('/models/Cattedrale_decimata_u0_v0_normal.p
 manager.onLoad = () => {
     const loader = new FBXLoader();
     loader.load(
-        './models/Cattedrale_decimata.fbx',
+        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata.fbx', // Nuovo URL su S3
         (fbx) => {
             model = fbx;
             model.traverse((child) => {
