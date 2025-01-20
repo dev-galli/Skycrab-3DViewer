@@ -1,16 +1,13 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    base: '/', // Base URL per il progetto
-    server: {
-        port: 3000, // Porta del server di sviluppo
-    },
+    base: '/', // Base del progetto
     build: {
         rollupOptions: {
-            input: {
-                main: './index.html', // Punto di ingresso principale
-            },
+            input: './index.html', // Punto di ingresso del progetto
         },
     },
-    publicDir: 'models', // Servi la cartella `models` come risorse statiche
+    server: {
+        port: 3000,
+    },
 });
