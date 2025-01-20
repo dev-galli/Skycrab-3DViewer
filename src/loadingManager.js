@@ -21,14 +21,14 @@ const textureLoader = new THREE.TextureLoader(manager);
 
 // 3) Carica le texture necessarie
 const diffuseMap = textureLoader.load(
-    'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata_u0_v0_diffuse.png',
+    '/models/low_Cattedrale_decimata_u0_v0_diffuse.png',
     () => console.log('Texture diffuseMap caricata con successo!'),
     undefined,
     (error) => console.error('Errore nel caricamento della diffuseMap:', error)
 );
 
 const normalMap = textureLoader.load(
-    'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata_u0_v0_normal.png',
+    '/models/low_Cattedrale_decimata_u0_v0_normal.png',
     () => console.log('Texture normalMap caricata con successo!'),
     undefined,
     (error) => console.error('Errore nel caricamento della normalMap:', error)
@@ -40,7 +40,7 @@ manager.onLoad = () => {
 
     const loader = new FBXLoader();
     loader.load(
-        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata.fbx', // URL del modello su S3
+        '/models/Cattedrale_decimata.fbx', // URL del modello su S3
         (fbx) => {
             console.log('Modello FBX caricato con successo!');
             model = fbx;
