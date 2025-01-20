@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/src/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3DSpace</title>
+</head>
+
+<body>
+<header>
+    <div class="logo-container">
+        <img class="logo-s" src="asset/logowsk.png" alt="Logo" />
+    </div>
+    <!-- Icona menu (visibile solo su mobile) -->
+    <div class="menu-icon" id="menu-icon">
+        <img class="menu-icon-img" src="asset/sun-2.png" alt="Menu">
+    </div>
+    <!-- Menu -->
+    <nav class="menu" id="menu">
+        <button id="day-mode">Giorno</button>
+        <button id="sunset-mode">Tramonto</button>
+        <button id="night-mode">Notte</button>
+    </nav>
+</header>
+
+    <div id="fade-screen"></div> <!-- Overlay per il fade-out -->
+
+    <div id="loading-screen">
+        <div class="loader">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+    </div>
+
+    <div id="scene-container"></div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+<footer>
+    <div>
+        <img class="logo-f" src="asset/fglogo.png" alt="Footer Logo" />
+        Powered by francescogalli.design
+    </div>
+</footer>
+
+</html>
