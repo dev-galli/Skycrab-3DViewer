@@ -20,12 +20,18 @@ export function setupCameraControls(camera, renderer) {
 
     // Abilita lo "smooth damping" per movimenti fluidi
     controls.enableDamping = true;
-    controls.dampingFactor = 0.1; // Valore consigliato (più basso = più fluido, più alto = più reattivo)
+    controls.dampingFactor = 0.1;
+
+    // Modifica il comportamento del tocco su dispositivi mobili
+    controls.touches = {
+        ONE: THREE.TOUCH.ROTATE, // Toccare con un dito per ruotare
+        TWO: THREE.TOUCH.DOLLY_PAN, // Due dita per zoomare e panning
+    };
 
     // Limiti per il panning
     const panLimits = {
-        min: { x: -50, y: 10 }, // Limite minimo per X e Y
-        max: { x: 50, y: 40 },  // Limite massimo per X e Y
+        min: { x: -50, y: 10 },
+        max: { x: 50, y: 40 },
     };
 
     function limitPan() {
@@ -44,10 +50,10 @@ export function setupCameraControls(camera, renderer) {
     // Per un effetto più fluido, aggiorna i controlli in ogni frame
     function animate() {
         requestAnimationFrame(animate);
-        controls.update(); // Aggiorna lo stato dei controlli (richiesto con `enableDamping`)
+        controls.update(); // Aggiorna lo stato dei controlli
     }
 
-    animate(); // Avvia l'animazione per aggiornare costantemente i controlli
+    animate(); // Avvia l'animazione
 
     return controls;
 }
