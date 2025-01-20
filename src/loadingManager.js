@@ -27,7 +27,7 @@ const normalMap = textureLoader.load('/models/Cattedrale_decimata_u0_v0_normal.p
 manager.onLoad = () => {
     const loader = new FBXLoader();
     loader.load(
-        '/models/Cattedrale_decimata.fbx',
+        './models/Cattedrale_decimata.fbx',
         (fbx) => {
             model = fbx;
             model.traverse((child) => {
