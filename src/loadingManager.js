@@ -19,8 +19,8 @@ manager.onError = (url) => {
 const textureLoader = new THREE.TextureLoader(manager);
 
 // 3) Carica le texture necessarie
-const diffuseMap = textureLoader.load('/models/Cattedrale_decimata_u0_v0_diffuse.png');
-const normalMap = textureLoader.load('/models/Cattedrale_decimata_u0_v0_normal.png');
+const diffuseMap = textureLoader.load('https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata_u0_v0_diffuse.png');
+const normalMap = textureLoader.load('https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata_u0_v0_normal.png');
 
 // 4) Una volta che TUTTI i file passati al manager sono caricati, manager.onLoad verrà chiamato.
 //    A quel punto puoi caricare il modello FBX sapendo che le texture sono già disponibili.
