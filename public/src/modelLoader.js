@@ -6,7 +6,7 @@ export function loadModel(scene, diffuseMap, normalMap) {
     return new Promise((resolve, reject) => {
         const loader = new FBXLoader();
         loader.load(
-            '/public/models/Cattedrale_decimata.fbx',
+            '/models/Cattedrale_decimata.fbx',
             (fbx) => {
                 const model = fbx;
                 model.traverse((child) => {
