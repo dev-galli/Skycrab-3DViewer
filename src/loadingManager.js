@@ -1,67 +1,64 @@
-const progressText = document.getElementById('progress-text');
-const loadingScreen = document.getElementById('loading-screen');
+import * as THREE from 'three';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
-// 1) Crea un LoadingManager
-const manager = new THREE.LoadingManager();
+export function setupLoaderManager(scene) {
+    const progressText = document.getElementById('progress-text');
+    const loadingScreen = document.getElementById('loading-screen');
 
-// Callback per monitorare il progresso del caricamento
-manager.onStart = (url, itemsLoaded, itemsTotal) => {
-    console.log(`Inizio caricamento: ${url}`);
-    console.log(`File caricati: ${itemsLoaded}/${itemsTotal}`);
-    progressText.textContent = 'Caricamento: 0%';
-};
+    // Crea il LoadingManager
+    const manager = new THREE.LoadingManager();
 
-manager.onProgress = (url, itemsLoaded, itemsTotal) => {
-    const percent = Math.round((itemsLoaded / itemsTotal) * 100);
-    console.log(`Caricamento file: ${url} (${itemsLoaded} / ${itemsTotal})`);
-    progressText.textContent = `Caricamento: ${percent}%`;
-};
+    // Callback per il caricamento
+    manager.onStart = (url, itemsLoaded, itemsTotal) => {
+        console.log(`Inizio caricamento: ${url}`);
+        console.log(`File caricati finora: ${itemsLoaded} di ${itemsTotal}`);
+        if (progressText) {
+            progressText.textContent = 'Caricamento: 0%';
+        }
+    };
 
-manager.onLoad = () => {
-    console.log('Tutti i file caricati con successo!');
-    progressText.textContent = 'Caricamento: 100%';
+    manager.onProgress = (url, itemsLoaded, itemsTotal) => {
+        console.log(`Caricamento in corso: ${url}`);
+        const percent = Math.round((itemsLoaded / itemsTotal) * 100);
+        if (progressText) {
+            progressText.textContent = `Caricamento: ${percent}%`;
+        }
+    };
 
-    // Nascondi il loading screen dopo un breve delay
-    setTimeout(() => {
-        loadingScreen.style.display = 'none';
-    }, 500);
-};
+    manager.onLoad = () => {
+        console.log('Tutti i file caricati con successo!');
+        if (progressText) {
+            progressText.textContent = 'Caricamento: 100%';
+        }
 
-manager.onError = (url) => {
-    console.error('Errore nel caricamento di:', url);
-};
+        // Nascondi il loader dopo un breve ritardo
+        if (loadingScreen) {
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }
+    };
 
-// Carica le risorse con il TextureLoader e il modello FBX come già definito
+    manager.onError = (url) => {
+        console.error(`Errore nel caricamento della risorsa: ${url}`);
+    };
 
-// 3) Crea un TextureLoader che utilizza il manager
-const textureLoader = new THREE.TextureLoader(manager);
+    // Carica le texture
+    const textureLoader = new THREE.TextureLoader(manager);
+    const diffuseMap = textureLoader.load(
+        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/low_Cattedrale_decimata_u0_v0_diffuse.png'
+    );
+    const normalMap = textureLoader.load(
+        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/low_Cattedrale_decimata_u0_v0_normal.png'
+    );
 
-// Carica le texture necessarie
-const diffuseMap = textureLoader.load(
-    'https://demo-skycrab.s3.eu-north-1.amazonaws.com/low_Cattedrale_decimata_u0_v0_diffuse.png',
-    () => console.log('Texture diffuseMap caricata con successo!'),
-    undefined,
-    (error) => console.error('Errore nel caricamento della diffuseMap:', error)
-);
-
-const normalMap = textureLoader.load(
-    'https://demo-skycrab.s3.eu-north-1.amazonaws.com/low_Cattedrale_decimata_u0_v0_normal.png',
-    () => console.log('Texture normalMap caricata con successo!'),
-    undefined,
-    (error) => console.error('Errore nel caricamento della normalMap:', error)
-);
-
-// 4) Una volta che tutte le risorse sono caricate, carica il modello FBX
-manager.onLoad = () => {
-    console.log('Tutte le texture sono state caricate, procedo con il modello FBX.');
-
-    const loader = new FBXLoader();
-    loader.load(
+    // Carica il modello FBX
+    const fbxLoader = new FBXLoader(manager);
+    fbxLoader.load(
         'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata.fbx',
         (fbx) => {
             console.log('Modello FBX caricato con successo!');
-            model = fbx;
-            model.traverse((child) => {
+            fbx.traverse((child) => {
                 if (child.isMesh) {
                     console.log('Trovato un Mesh:', child.name);
 
@@ -83,17 +80,17 @@ manager.onLoad = () => {
                     child.receiveShadow = true;
                 }
             });
-            scene.add(model);
-            console.log('Modello aggiunto alla scena.');
-
-            fadeInModel(model, 2000);
+            scene.add(fbx);
+            fadeInModel(fbx, 2000);
         },
         undefined,
         (error) => {
             console.error('Errore durante il caricamento dell’FBX:', error);
         }
     );
-};
+
+    return manager;
+}
 
 // Funzione per il fade-in del modello
 function fadeInModel(model, duration) {

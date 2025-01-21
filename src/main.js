@@ -2,9 +2,8 @@ import * as THREE from 'three';
 import { initializeScene, scene, camera, renderer } from './scene.js';
 import { setupCameraControls } from './camera-controls.js';
 import { setDayLighting, setSunsetLighting, setNightLighting } from './light.js';
-import { createPlane } from './plane.js'; 
-
-
+import { createPlane } from './plane.js';
+import { setupLoaderManager } from './loadingManager.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const menuIcon = document.getElementById('menu-icon');
@@ -32,19 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Configura il LoaderManager e inizializza la scena
+setupLoaderManager(scene);
+
 initializeScene().then(() => {
     // Inizializza i controlli della camera
     const controls = setupCameraControls(camera, renderer);
     const plane = createPlane();
     scene.add(plane);
     scene.fog = new THREE.FogExp2(0xffffff, 0.0005); // Nebbia iniziale tenue e neutra
-
-
-    // Nascondi il loader
-    const loadingScreen = document.getElementById('loading-screen');
-    if (loadingScreen) {
-        loadingScreen.style.display = 'none';
-    }
 
     function animate() {
         requestAnimationFrame(animate);
