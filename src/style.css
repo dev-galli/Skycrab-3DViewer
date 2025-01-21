@@ -148,6 +148,10 @@ nav.menu button:active {
     footer {
         min-height: 60px;
     }
+
+    .logo-f {
+        max-height: 25px;
+    }
 }
 
 /* Loader */
