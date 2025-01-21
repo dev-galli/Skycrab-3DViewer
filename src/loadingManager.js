@@ -1,3 +1,6 @@
+const progressText = document.getElementById('progress-text');
+const loadingScreen = document.getElementById('loading-screen');
+
 // 1) Crea un LoadingManager
 const manager = new THREE.LoadingManager();
 
@@ -5,21 +8,35 @@ const manager = new THREE.LoadingManager();
 manager.onStart = (url, itemsLoaded, itemsTotal) => {
     console.log(`Inizio caricamento: ${url}`);
     console.log(`File caricati: ${itemsLoaded}/${itemsTotal}`);
+    progressText.textContent = 'Caricamento: 0%';
 };
+
+manager.onProgress = (url, itemsLoaded, itemsTotal) => {
+    const percent = Math.round((itemsLoaded / itemsTotal) * 100);
+    console.log(`Caricamento file: ${url} (${itemsLoaded} / ${itemsTotal})`);
+    progressText.textContent = `Caricamento: ${percent}%`;
+};
+
 manager.onLoad = () => {
     console.log('Tutti i file caricati con successo!');
+    progressText.textContent = 'Caricamento: 100%';
+
+    // Nascondi il loading screen dopo un breve delay
+    setTimeout(() => {
+        loadingScreen.style.display = 'none';
+    }, 500);
 };
-manager.onProgress = (url, itemsLoaded, itemsTotal) => {
-    console.log(`Caricamento file: ${url} (${itemsLoaded} / ${itemsTotal})`);
-};
+
 manager.onError = (url) => {
     console.error('Errore nel caricamento di:', url);
 };
 
-// 2) Crea un TextureLoader che utilizza il manager
+// Carica le risorse con il TextureLoader e il modello FBX come già definito
+
+// 3) Crea un TextureLoader che utilizza il manager
 const textureLoader = new THREE.TextureLoader(manager);
 
-// 3) Carica le texture necessarie
+// Carica le texture necessarie
 const diffuseMap = textureLoader.load(
     'https://demo-skycrab.s3.eu-north-1.amazonaws.com/low_Cattedrale_decimata_u0_v0_diffuse.png',
     () => console.log('Texture diffuseMap caricata con successo!'),
@@ -40,7 +57,7 @@ manager.onLoad = () => {
 
     const loader = new FBXLoader();
     loader.load(
-        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata.fbx', // URL del modello su S3
+        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata.fbx',
         (fbx) => {
             console.log('Modello FBX caricato con successo!');
             model = fbx;
@@ -48,20 +65,18 @@ manager.onLoad = () => {
                 if (child.isMesh) {
                     console.log('Trovato un Mesh:', child.name);
 
-                    // Calcola le normali se non presenti
                     if (!child.geometry.hasAttribute('normal')) {
                         child.geometry.computeVertexNormals();
                         console.log(`Normali calcolate per il mesh ${child.name}`);
                     }
 
-                    // Applica il materiale
                     child.material = new THREE.MeshStandardMaterial({
                         map: diffuseMap,
                         normalMap: normalMap,
                         roughness: 0.7,
                         metalness: 0.0,
-                        transparent: true, // Abilita la trasparenza
-                        opacity: 0 // Imposta invisibile inizialmente
+                        transparent: true,
+                        opacity: 0,
                     });
 
                     child.castShadow = true;
@@ -71,8 +86,7 @@ manager.onLoad = () => {
             scene.add(model);
             console.log('Modello aggiunto alla scena.');
 
-            // Avvia il fade-in del modello
-            fadeInModel(model, 2000); // 2 secondi per il fade-in
+            fadeInModel(model, 2000);
         },
         undefined,
         (error) => {
@@ -89,7 +103,7 @@ function fadeInModel(model, duration) {
 
     function animate() {
         const elapsedTime = performance.now() - startTime;
-        const t = Math.min(elapsedTime / duration, 1); // Clamp tra 0 e 1
+        const t = Math.min(elapsedTime / duration, 1);
         const currentOpacity = startOpacity + (endOpacity - startOpacity) * t;
 
         model.traverse((child) => {
