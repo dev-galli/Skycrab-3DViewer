@@ -118,4 +118,4 @@ function fadeInModel(model, duration) {
     }
 
     animate();
-}
+}   

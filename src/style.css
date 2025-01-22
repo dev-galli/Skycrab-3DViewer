@@ -30,7 +30,7 @@ header {
     max-height: 40px;
 }
 .logo-f {
-    max-height: 40px;
+    max-height: 30px;
 }
 /* Menu icon (hamburger) */
 .menu-icon {
@@ -56,6 +56,7 @@ nav.menu {
     gap: 8px;
 }
 
+
 nav.menu.hidden {
     display: none;
     /* Hidden by default on mobile */
@@ -71,17 +72,16 @@ nav.menu button {
 
     color: #fff;
     border: .5px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    padding: 8px 16px;
-    font-family: 'PPMori-Bold', sans-serif;
+    border-radius:32px;
+    padding: 10px 16px;
+    font-family: 'PPMori-Regular', sans-serif;
     font-size: 11px;
-    text-transform: uppercase;
     letter-spacing: 0px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 6px;
     transition: all 0.3s ease-in-out;
     outline: none;
 }
@@ -95,9 +95,16 @@ nav.menu button:focus {
     box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
 }
 
-nav.menu button:active {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: scale(0.98);
+nav.menu button img {
+    width: 18px;
+}
+
+.menu-button.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    /* Evidenziazione del pulsante attivo */
+    border-color: rgba(255, 255, 255, 0.8);
+    /* Cambia il colore del bordo */
+    
 }
 
 /* Mobile-specific styles */
@@ -111,7 +118,7 @@ nav.menu button:active {
         position: absolute;
         top: 80px;
         right: 16px;
-        border: .5px solid rgba(255, 255, 255, 0.2);
+        border: .5px solid rgba(255, 255, 255, 0.05);
         background-color: rgba(0, 0, 0, 0.2);
         /* Colore semi-trasparente per l'effetto blur */
         backdrop-filter: blur(10px);

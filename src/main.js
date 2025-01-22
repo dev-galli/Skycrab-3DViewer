@@ -8,25 +8,37 @@ import { setupLoaderManager } from './loadingManager.js';
 document.addEventListener('DOMContentLoaded', () => {
     const menuIcon = document.getElementById('menu-icon');
     const menu = document.getElementById('menu');
+    const buttons = menu.querySelectorAll('.menu-button');
 
     // Aggiungi l'evento per aprire/chiudere il menu
     menuIcon.addEventListener('click', () => {
         menu.classList.toggle('visible');
     });
 
-    // Eventi per cambiare modalità
+    // Funzione per rimuovere la classe attiva da tutti i pulsanti
+    const clearActiveState = () => {
+        buttons.forEach((button) => button.classList.remove('active'));
+    };
+
+    // Eventi per cambiare modalità e aggiungere classe attiva
     document.getElementById('day-mode').addEventListener('click', () => {
         setDayLighting(scene);
+        clearActiveState();
+        document.getElementById('day-mode').classList.add('active');
         menu.classList.remove('visible'); // Chiude il menu
     });
 
     document.getElementById('sunset-mode').addEventListener('click', () => {
         setSunsetLighting(scene);
+        clearActiveState();
+        document.getElementById('sunset-mode').classList.add('active');
         menu.classList.remove('visible'); // Chiude il menu
     });
 
     document.getElementById('night-mode').addEventListener('click', () => {
         setNightLighting(scene);
+        clearActiveState();
+        document.getElementById('night-mode').classList.add('active');
         menu.classList.remove('visible'); // Chiude il menu
     });
 });

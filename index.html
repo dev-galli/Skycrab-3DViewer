@@ -17,14 +17,20 @@
     </div>
     <!-- Icona menu (visibile solo su mobile) -->
     <div class="menu-icon" id="menu-icon">
-        <img class="menu-icon-img" src="https://demo-skycrab.s3.eu-north-1.amazonaws.com/sun-2.png" alt="Menu">
+        <img class="menu-icon-img" src="/asset/light.svg" alt="Menu">
     </div>
     <!-- Menu -->
-    <nav class="menu" id="menu">
-        <button id="day-mode">Giorno</button>
-        <button id="sunset-mode">Tramonto</button>
-        <button id="night-mode">Notte</button>
-    </nav>
+<nav class="menu" id="menu" aria-label="Lighting Modes">
+    <button id="day-mode" class="menu-button active" aria-label="Switch to Day Mode">
+        <img src="/asset/day.svg" alt="" class="icon"> Giorno
+    </button>
+    <button id="sunset-mode" class="menu-button" aria-label="Switch to Sunset Mode">
+        <img src="/asset/sunset.svg" alt="" class="icon"> Tramonto
+    </button>
+    <button id="night-mode" class="menu-button" aria-label="Switch to Night Mode">
+        <img src="/asset/night.svg" alt="" class="icon"> Notte
+    </button>
+</nav>
 </header>
 
     <div id="fade-screen"></div> <!-- Overlay per il fade-out -->
