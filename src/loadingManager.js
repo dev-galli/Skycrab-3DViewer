@@ -46,16 +46,16 @@ export function setupLoaderManager(scene) {
     // Carica le texture
     const textureLoader = new THREE.TextureLoader(manager);
     const diffuseMap = textureLoader.load(
-        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/low_Cattedrale_decimata_u0_v0_diffuse.png'
+        'models/low_Cattedrale_decimata_u0_v0_diffuse.png'
     );
     const normalMap = textureLoader.load(
-        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/low_Cattedrale_decimata_u0_v0_normal.png'
+        'models/low_Cattedrale_decimata_u0_v0_normal.png'
     );
 
     // Carica il modello FBX
     const fbxLoader = new FBXLoader(manager);
     fbxLoader.load(
-        'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata.fbx',
+        'models/Cattedrale_decimata.fbx',
         (fbx) => {
             console.log('Modello FBX caricato con successo!');
             fbx.traverse((child) => {

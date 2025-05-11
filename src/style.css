@@ -1,293 +1,72 @@
+html,
 body {
-    background-color: #000000;
+    height: 100%;
+    width: 100vw;
     margin: 0;
     padding: 0;
-    height: 100%;
+    background: #000;
+    font-family: 'Inter', Arial, sans-serif;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+/* Smooth wrapper setup for GSAP */
+#smooth-wrapper {
+    height: 100vh;
+    width: 100vw;
     overflow: hidden;
-}
-
-/* Header */
-header {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-    padding: 32px;
-    background-color: transparent;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    box-sizing: border-box;
-}
-
-/* Logo */
-.logo-container {
-    max-height: 50px;
-}
-
-.logo-s {
-    max-height: 40px;
-}
-.logo-f {
-    max-height: 30px;
-}
-/* Menu icon (hamburger) */
-.menu-icon {
-    display: none;
-    /* Hidden on desktop */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-}
-
-.menu-icon-img {
-    max-width: 24px;
-    max-height: 24px;
-    object-fit: contain;
-}
-
-/* Menu */
-nav.menu {
-    display: flex;
-    gap: 8px;
-}
-
-
-nav.menu.hidden {
-    display: none;
-    /* Hidden by default on mobile */
-}
-/* Buttons inside menu */
-nav.menu button {
-    background-color: rgba(0, 0, 0, 0.2);
-    /* Colore semi-trasparente per l'effetto blur */
-    backdrop-filter: blur(10px);
-    /* Aggiunge lo sfocamento */
-    -webkit-backdrop-filter: blur(10px);
-    /* Supporto per Safari */
-
-    color: #fff;
-    border: .5px solid rgba(255, 255, 255, 0.2);
-    border-radius:32px;
-    padding: 10px 16px;
-    font-family: 'PPMori-Regular', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: all 0.3s ease-in-out;
-    outline: none;
-}
-
-nav.menu button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-nav.menu button:focus {
-    box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
-}
-
-nav.menu button img {
-    width: 18px;
-}
-
-.menu-button.active {
-    background-color: rgba(255, 255, 255, 0.3);
-    /* Evidenziazione del pulsante attivo */
-    border-color: rgba(255, 255, 255, 0.8);
-    /* Cambia il colore del bordo */
-    
-}
-
-/* Mobile-specific styles */
-@media (max-width: 768px) {
-    .menu-icon {
-        display: flex;
-        /* Show hamburger icon on mobile */
-    }
-
-    nav.menu {
-        position: absolute;
-        top: 80px;
-        right: 16px;
-        border: .5px solid rgba(255, 255, 255, 0.05);
-        background-color: rgba(0, 0, 0, 0.2);
-        /* Colore semi-trasparente per l'effetto blur */
-        backdrop-filter: blur(10px);
-        /* Aggiunge lo sfocamento */
-        -webkit-backdrop-filter: blur(10px);
-        /* Supporto per Safari */
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 16px;
-        gap: 4px;
-        border-radius: 24px;
-        margin: 0;
-        display: none;
-        /* Hidden by default */
-        width: 120px;
-        /* Ensure proper width */
-    }
-
-    nav.menu.visible {
-        display: flex;
-        /* Show when visible */
-    }
-
-    nav.menu button {
-        margin: 4px 0;
-        width: 100%;
-        font-size: 12px;
-        text-align: left;
-        padding: 12px 16px;
-        border-radius: 50px;
-        font-size: 8px;
-    }
-
-    footer {
-        min-height: 60px;
-    }
-
-    .logo-f {
-        max-height: 25px;
-    }
-}
-
-
-
-.loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-}
-
-.circle {
-    width: 10px;
-    height: 10px;
-    background-color: #ffffff;
-    border-radius: 50%;
-    animation: apple-bounce 1.2s infinite ease-in-out;
-}
-
-.circle:nth-child(1) {
-    animation-delay: -0.3s;
-}
-
-.circle:nth-child(2) {
-    animation-delay: -0.2s;
-}
-
-.circle:nth-child(3) {
-    animation-delay: -0.1s;
-}
-
-@keyframes apple-bounce {
-
-    0%,
-    80%,
-    100% {
-        transform: scale(0);
-        opacity: 0.3;
-    }
-
-    50% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* Footer */
-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 220px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-    color: #ffffff;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 32px;
-    box-sizing: border-box;
-}
-
-footer div {
-    display: flex;
-    gap: 16px;
-    font-family: 'PPMori-Regular', sans-serif;
-    flex-direction: row;
-    align-items: center;
-    font-size: 11px;
-    opacity: 0.4;
-    letter-spacing: -0.2px;
-}
-
-
-
-#loading-screen {
     position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: #000000;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        color: white;
-        font-family: 'PPMori-Regular', sans-serif;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
-#loading-screen .loader {
-    display: flex;
-    gap: 8px;
+#smooth-content {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
 }
 
-#loading-screen .circle {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #fff;
-    animation: bounce 1.2s infinite ease-in-out;
+/* Scene container adjusted for ScrollSmoother */
+#scene-container {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 0;
 }
 
-#loading-screen .circle:nth-child(2) {
-    animation-delay: -0.4s;
+/* Text overlay with parallax effects */
+.text-overlay {
+    position: relative;
+    z-index: 1;
+    padding: 1.2rem;
+    will-change: transform;
 }
 
-#loading-screen .circle:nth-child(3) {
-    animation-delay: -0.8s;
+.text-overlay .title {
+    font-size: 10rem;
+    margin-bottom: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.14;
+    text-shadow: 0 1.2px 1.7px rgba(0, 0, 0, 0.3);
+    will-change: transform;
+    /* Add ScrollSmoother parallax effect */
+    data-speed="0.5";
+    data-speed="clamp(0.5)";
 }
 
-@keyframes bounce {
-
-    0%,
-    80%,
-    100% {
-        transform: scale(0);
-    }
-
-    40% {
-        transform: scale(1);
-    }
-}
-
-#progress-text {
-    margin-top: 20px;
-    color: #fff;
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-    text-align: center;
+.text-overlay .description {
+    font-size: 1.20rem;
+    line-height: 1.68;
+    letter-spacing: 0.01em;
+    font-weight: 400;
+    opacity: 0.93;
+    will-change: transform;
+    /* Add slightly different parallax speed */
+    data-speed="0.7";
+    data-speed="clamp(0.7)";
 }

@@ -1,129 +1,68 @@
-// light.js
 import * as THREE from 'three';
-let ambientLight, directionalLight;
 
 export function setupLighting(scene) {
-    // Imposta la luce ambientale
-    ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    // Configurazione luci principali
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.6); // Più intensa
     scene.add(ambientLight);
 
-    // Imposta la luce direzionale
-    directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
-    directionalLight.position.set(10, 10, 10);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
-    directionalLight.shadow.camera.near = 0.5;
-    directionalLight.shadow.camera.far = 500;
-    directionalLight.shadow.camera.left = -50;
-    directionalLight.shadow.camera.right = 50;
-    directionalLight.shadow.camera.top = 50;
-    directionalLight.shadow.camera.bottom = -50;
-    scene.add(directionalLight);
-}
+    const sunLight = new THREE.DirectionalLight(0xFFFACD, 2.2); // Più intensa
+    sunLight.position.set(50, 120, 50); // Un po’ più alta di default
+    sunLight.castShadow = true;
 
-function transitionLighting(params, duration) {
-    const {
-        ambientColor, ambientIntensity,
-        directionalColor, directionalIntensity, directionalPosition,
-    } = params;
+    // Configurazione ombre
+    sunLight.shadow.mapSize.width = 4096;
+    sunLight.shadow.mapSize.height = 4096;
+    sunLight.shadow.camera.near = 0.1;
+    sunLight.shadow.camera.far = 1000;
+    sunLight.shadow.camera.left = -200;
+    sunLight.shadow.camera.right = 200;
+    sunLight.shadow.camera.top = 200;
+    sunLight.shadow.camera.bottom = -200;
+    sunLight.shadow.bias = -0.0001;
+    sunLight.shadow.radius = 2;
 
-    const startAmbientColor = ambientLight.color.clone();
-    const startAmbientIntensity = ambientLight.intensity;
-    const startDirectionalColor = directionalLight.color.clone();
-    const startDirectionalIntensity = directionalLight.intensity;
-    const startDirectionalPosition = directionalLight.position.clone();
+    scene.add(sunLight);
 
-    const targetAmbientColor = new THREE.Color(ambientColor);
-    const targetDirectionalColor = new THREE.Color(directionalColor);
+    // Luce di riempimento più presente
+    const fillLight = new THREE.DirectionalLight(0x4B6EA8, 0.8);
+    fillLight.position.set(-50, 40, -50);
+    scene.add(fillLight);
 
-    const startTime = performance.now();
+    // Funzione di animazione della luce
+    const animateLight = (speed = 0.2) => { // speed > 0.1 = ciclo giorno più veloce!
+        const time = Date.now() * 0.001 * speed;
 
-    function animateTransition() {
-        const now = performance.now();
-        const elapsed = now - startTime;
-        const t = Math.min(elapsed / duration, 1);
+        // Movimento del sole più rapido e resta alto nel cielo
+        const x = Math.sin(time) * 200;
+        // Maggiore "altezza" minima: la luce non scende mai troppo bassa
+        const y = Math.abs(Math.cos(time)) * 80 + 100; // tra 100 e 180
+        const z = Math.cos(time * 0.5) * 100;
 
-        ambientLight.color.copy(startAmbientColor).lerp(targetAmbientColor, t);
-        ambientLight.intensity = startAmbientIntensity + (ambientIntensity - startAmbientIntensity) * t;
+        sunLight.position.set(x, y, z);
 
-        directionalLight.color.copy(startDirectionalColor).lerp(targetDirectionalColor, t);
-        directionalLight.intensity = startDirectionalIntensity + (directionalIntensity - startDirectionalIntensity) * t;
-        directionalLight.position.lerpVectors(startDirectionalPosition, directionalPosition, t);
+        // Intensità sempre almeno su 0.6, mai troppo basso
+        const intensity = THREE.MathUtils.clamp(y / 120, 0.6, 2.2);
+        sunLight.intensity = intensity;
 
-        if (t < 1) {
-            requestAnimationFrame(animateTransition);
+        // Colore e intensità fillLight variano con l'altezza
+        if (y < 120) {
+            sunLight.color.setHex(0xFF8000); // Più arancione per il tramonto
+            fillLight.intensity = 0.2;
+        } else if (y < 160) {
+            sunLight.color.setHex(0xFFD700); // Giallo caldo
+            fillLight.intensity = 0.4;
         } else {
-            ambientLight.color.copy(targetAmbientColor);
-            ambientLight.intensity = ambientIntensity;
-            directionalLight.color.copy(targetDirectionalColor);
-            directionalLight.intensity = directionalIntensity;
-            directionalLight.position.copy(directionalPosition);
-            directionalLight.shadow.needsUpdate = true;
+            sunLight.color.setHex(0xFFFACD); // Luce diurna
+            fillLight.intensity = 0.6;
         }
-    }
 
-    animateTransition();
-}
+        ambientLight.intensity = THREE.MathUtils.clamp(intensity * 0.5, 0.3, 1.2);
+    };
 
-// Definizioni degli scenari di illuminazione
-export function setDayLighting(scene) {
-    transitionLighting({
-        ambientColor: 0xffffff,
-        ambientIntensity: 1.0,
-        directionalColor: 0xffffff,
-        directionalIntensity: 2.0,
-        directionalPosition: new THREE.Vector3(10, 10, 10),
-    }, 3000);
-}
-
-export function setSunsetLighting(scene) {
-    transitionLighting({
-        ambientColor: 0xffa07a, // Arancione tenue
-        ambientIntensity: 0.6,
-        directionalColor: 0xffd27f, // Colore caldo ma non eccessivo
-        directionalIntensity: 1.7,
-        directionalPosition: new THREE.Vector3(-15, 5, 15), // Posizione laterale e più bassa
-    }, 3000);
-
-    // Aggiungi la nebbia in transizione
-    transitionFog(scene, 0xffb482, 0.003, 3000); // Nebbia arancione tenue con densità moderata
-}
-
-export function setNightLighting(scene) {
-    transitionLighting({
-        ambientColor: 0x000022,       // Colore molto scuro con una tinta blu
-        ambientIntensity: 1.4,        // Bassa intensità ambientale
-        directionalColor: 0x666688,   // Luce direzionale con tonalità blu/grigio, come la luce lunare
-        directionalIntensity: 1.5,    // Bassa intensità per simulare la luce della luna
-        directionalPosition: new THREE.Vector3(-50, 40, -50),  // Posizione della luce per simulare la luna alta nel cielo
-    }, 3000);
-    transitionFog(scene, 0x000022, 0.007, 3000); // Nebbia arancione tenue con densità moderata
-
-}
-
-// Funzione per gestire la transizione della nebbia
-function transitionFog(scene, targetColor, targetDensity, duration) {
-    const startFogColor = scene.fog.color.clone();
-    const startFogDensity = scene.fog.density;
-
-    const targetFogColor = new THREE.Color(targetColor);
-
-    const startTime = performance.now();
-
-    function animateFog() {
-        const now = performance.now();
-        const elapsed = now - startTime;
-        const t = Math.min(elapsed / duration, 1);
-
-        // Interpola il colore e la densità della nebbia
-        scene.fog.color.copy(startFogColor).lerp(targetFogColor, t);
-        scene.fog.density = startFogDensity + (targetDensity - startFogDensity) * t;
-
-        if (t < 1) {
-            requestAnimationFrame(animateFog);
-        }
-    }
-
-    animateFog();
+    return {
+        sunLight,
+        ambientLight,
+        fillLight,
+        animateLight // Importante: esporta la funzione di animazione
+    };
 }

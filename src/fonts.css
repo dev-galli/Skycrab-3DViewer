@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Raveo';
+    src: url('/asset/Raveo-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Raveo';
+    src: url('/asset/Raveo-SemiBold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+} 

@@ -2,66 +2,80 @@
 import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
-export function loadModel(scene, diffuseMap, normalMap) {
+export function setupModelLoader(scene) {
+    const progressText = document.getElementById('progress-text');
+    const loadingScreen = document.getElementById('loading-screen');
+    const manager = new THREE.LoadingManager();
+
+    manager.onStart = (url, itemsLoaded, itemsTotal) => {
+        if (progressText) progressText.textContent = 'Caricamento: 0%';
+    };
+
+    manager.onProgress = (url, itemsLoaded, itemsTotal) => {
+        const percent = Math.round((itemsLoaded / itemsTotal) * 100);
+        if (progressText) progressText.textContent = `Caricamento: ${percent}%`;
+    };
+
+    manager.onLoad = () => {
+        if (progressText) progressText.textContent = 'Caricamento: 100%';
+        if (loadingScreen) setTimeout(() => { loadingScreen.style.display = 'none'; }, 500);
+    };
+
+    manager.onError = (url) => {
+        console.error(`Errore nel caricamento della risorsa: ${url}`);
+    };
+
+    const textureLoader = new THREE.TextureLoader(manager);
+    const diffuseMap = textureLoader.load('/models/low_Cattedrale_decimata_u0_v0_diffuse.png');
+    const normalMap = textureLoader.load('/models/low_Cattedrale_decimata_u0_v0_normal.png');
+
     return new Promise((resolve, reject) => {
-        const loader = new FBXLoader();
-        loader.load(
-            'https://demo-skycrab.s3.eu-north-1.amazonaws.com/Cattedrale_decimata.fbx',
+        const fbxLoader = new FBXLoader(manager);
+        fbxLoader.load(
+            '/models/Cattedrale_decimata.fbx',
             (fbx) => {
-                const model = fbx;
-                model.traverse((child) => {
+                fbx.traverse((child) => {
                     if (child.isMesh) {
-                        if (!child.geometry.hasAttribute('normal')) {
-                            child.geometry.computeVertexNormals();
-                        }
+                        if (!child.geometry.hasAttribute('normal')) child.geometry.computeVertexNormals();
                         child.material = new THREE.MeshStandardMaterial({
                             map: diffuseMap,
                             normalMap: normalMap,
                             roughness: 0.7,
                             metalness: 0.0,
                             transparent: true,
-                            opacity: 0
+                            opacity: 0,
                         });
                         child.castShadow = true;
                         child.receiveShadow = true;
                     }
                 });
-                scene.add(model);
-                resolve(model);
+                scene.add(fbx);
+                resolve(fbx);
             },
             undefined,
-            (error) => {
-                console.error('Errore durante il caricamento dell’FBX:', error);
-                reject(error);
-            }
+            error => reject(error)
         );
     });
 }
 
 export function fadeInModel(model, duration) {
-    const start = performance.now();
-    const meshes = [];
-    model.traverse((child) => {
-        if (child.isMesh && child.material) {
-            meshes.push(child);
-        }
-    });
+    const startOpacity = 0;
+    const endOpacity = 1;
+    const startTime = performance.now();
 
-    function animateFade() {
-        const now = performance.now();
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
+    function animate() {
+        const elapsedTime = performance.now() - startTime;
+        const t = Math.min(elapsedTime / duration, 1);
+        const currentOpacity = startOpacity + (endOpacity - startOpacity) * t;
 
-        meshes.forEach((mesh) => {
-            if (mesh.material && mesh.material.transparent) {
-                mesh.material.opacity = progress;
+        model.traverse((child) => {
+            if (child.isMesh && child.material) {
+                child.material.opacity = currentOpacity;
+                child.material.transparent = true;
             }
         });
 
-        if (progress < 1) {
-            requestAnimationFrame(animateFade);
-        }
+        if (t < 1) requestAnimationFrame(animate);
     }
-
-    animateFade();
+    animate();
 }

@@ -2,57 +2,30 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="/src/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skycrab - 3DSpace</title>
-    <meta name="theme-color" content="#000000">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basilica di Santa Maria Maggiore</title>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+  
 
 <body>
 <header>
-    <div class="logo-container">
-        <img class="logo-s" src="https://demo-skycrab.s3.eu-north-1.amazonaws.com/logowsk.png" alt="Logo" />
-    </div>
-    <!-- Icona menu (visibile solo su mobile) -->
-    <div class="menu-icon" id="menu-icon">
-        <img class="menu-icon-img" src="/asset/light.svg" alt="Menu">
-    </div>
-    <!-- Menu -->
-<nav class="menu" id="menu" aria-label="Lighting Modes">
-    <button id="day-mode" class="menu-button active" aria-label="Switch to Day Mode">
-        <img src="/asset/day.svg" alt="" class="icon"> Giorno
-    </button>
-    <button id="sunset-mode" class="menu-button" aria-label="Switch to Sunset Mode">
-        <img src="/asset/sunset.svg" alt="" class="icon"> Tramonto
-    </button>
-    <button id="night-mode" class="menu-button" aria-label="Switch to Night Mode">
-        <img src="/asset/night.svg" alt="" class="icon"> Notte
-    </button>
-</nav>
+  <div class="logo-container">
+    <img class="logo-astra" src="asset/astra.svg" alt="Logo Astra" />
+    <img class="logo-s" src="https://demo-skycrab.s3.eu-north-1.amazonaws.com/logowsk.png" alt="Logo WSK" />
+  </div>
 </header>
+<div id="scene-container"></div>
+<div class="text-overlay">
+  <h1 class="overlay-title"></h1>
+  <p class="overlay-desc"></p>
+</div>
 
-    <div id="fade-screen"></div> <!-- Overlay per il fade-out -->
 
-    <div id="loading-screen">
-        <div class="loader">
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-        </div>
-        <p id="progress-text">Caricamento: 0%</p>
-    </div>
 
-    <div id="scene-container"></div>
-
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="src/main.js"></script>
 </body>
-<footer>
-    <div> 
-        <img class="logo-f test" src="https://demo-skycrab.s3.eu-north-1.amazonaws.com/fglogo.png" alt="Footer Logo" />
-        Powered by francescogalli.design
-    </div>
-</footer>
 
 </html>
