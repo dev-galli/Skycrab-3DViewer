@@ -1,5 +1,3 @@
-// main.js
-
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,11 +8,12 @@ import { createPlane } from './createPlane.js';
 import { setupLighting } from './light.js';
 import { setupModelLoader, fadeInModel } from './modelLoader.js';
 import { setupSmoothScrollParallax } from './scrollEffects.js';
+import { initDebugUI } from './debugSystem.js';
 
 // Registra i plugin GSAP
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-// === SCENA & RENDERER ===
+// === SETUP INIZIALE ===
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x222231);
 scene.fog = new THREE.FogExp2(0x000000, 0.001);
@@ -39,9 +38,9 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.physicallyCorrectLights = true;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.8;
+renderer.toneMappingExposure = 0.9;
 
-// Assicurati che l'elemento container esista
+// === SETUP CONTAINER ===
 const container = document.getElementById('scene-container');
 if (!container) {
     console.error('Container element not found!');
@@ -49,19 +48,37 @@ if (!container) {
 }
 container.appendChild(renderer.domElement);
 
-// === LUCI ===
+// === SETUP LIGHTING ===
 const lighting = setupLighting(scene);
+const { sunLight, ambientLight } = lighting;
 
-// === PIANO ===
+// === SETUP DEBUG UI ===
+let debugEnabled = true;
+const debugSystem = initDebugUI(scene, camera, {
+    sunLight,
+    ambientLight
+}, renderer);
+
+// Assicurati che il pannello sia visibile all'avvio
+debugSystem.toggle(debugEnabled);
+
+// Toggle debug con tasto 'D'
+document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'd') {
+        debugEnabled = !debugEnabled;
+        debugSystem.toggle(debugEnabled);
+    }
+});
+// === SETUP PIANO ===
 const plane = createPlane();
 scene.add(plane);
 
-// === OVERLAY E TEXT ELEMENTS ===
+// === SETUP UI ELEMENTS ===
 const overlay = document.querySelector('.text-overlay');
 const overlayTitle = document.querySelector('.overlay-title');
 const overlayDesc = document.querySelector('.overlay-desc');
 
-// === CAMERA, TARGET, ANIMAZIONI ===
+// === CAMERA CONTROL ===
 let currentPoint = 0;
 let target = new THREE.Vector3().copy(cameraPoints[0].target);
 
@@ -73,20 +90,24 @@ function updateOverlayContent(point) {
 function gotoPoint(index) {
     if (index < 0 || index >= cameraPoints.length) return;
     const point = cameraPoints[index];
+    const LIGHT_TRANSITION_DURATION = 1.5;
+
     gsap.to(camera.position, {
         x: point.position.x,
         y: point.position.y,
         z: point.position.z,
-        duration: 3,
+        duration: LIGHT_TRANSITION_DURATION,
         ease: "power2.inOut"
     });
+
     gsap.to(target, {
         x: point.target.x,
         y: point.target.y,
         z: point.target.z,
-        duration: 3,
+        duration: LIGHT_TRANSITION_DURATION,
         ease: "power2.inOut"
     });
+
     if (overlay) {
         gsap.timeline()
             .to(overlay, {
@@ -117,7 +138,7 @@ setupModelLoader(scene)
 // === GESTIONE SCROLL ===
 let isAnimating = false;
 const wheelHandler = (e) => {
-    if (isAnimating) return;
+    if (isAnimating || debugEnabled) return;
     const threshold = 30;
     if (Math.abs(e.deltaY) < threshold) return;
 
@@ -144,32 +165,34 @@ const onResize = () => {
 };
 window.addEventListener('resize', onResize);
 
-// === PERFORMANCE MONITORING ===
-let lastTime = 0;
-const fpsElement = document.getElementById('fps');
-function updateFPS(currentTime) {
-    if (fpsElement) {
-        const delta = (currentTime - lastTime) / 1000;
-        const fps = 1 / delta;
-        fpsElement.textContent = `FPS: ${Math.round(fps)}`;
-        lastTime = currentTime;
-    }
-}
-
 // === RENDER LOOP ===
+// === RENDER LOOP ===
+let lastTime = performance.now();
+
 function animate(currentTime) {
     requestAnimationFrame(animate);
 
-    
-    if (lighting && lighting.animateLight) {
-        lighting.animateLight(0.003);
+    if (!debugEnabled) {
+        camera.lookAt(target);
     }
 
-    camera.lookAt(target);
-    renderer.render(scene, camera);
+    if (debugEnabled) {
+        debugSystem.update({
+            camera,
+            target,
+            lighting: {
+                sunLight,
+                ambientLight
+            },
+            deltaTime: currentTime ? (currentTime - lastTime) / 1000 : 0,
+            renderer // Aggiungi il renderer qui
+        });
+    }
 
-    updateFPS(currentTime);
+    renderer.render(scene, camera);
+    lastTime = currentTime;
 }
+
 
 // === INIZIALIZZAZIONE SCROLL SMOOTHER ===
 setupSmoothScrollParallax();
@@ -181,16 +204,16 @@ if (ScrollSmoother) {
     });
 }
 
-// === CLEANUP FUNCTION ===
+// === CLEANUP ===
 function cleanup() {
     window.removeEventListener('resize', onResize);
     window.removeEventListener('wheel', wheelHandler);
     renderer.dispose();
-    // Dispose delle geometrie e dei materiali se necessario
+    debugSystem.dispose();
 }
 
-// === START ANIMATION ===
+// === START ===
 animate();
 
-// Esporta le funzioni necessarie
+// === EXPORTS ===
 export { scene, camera, renderer, cleanup };

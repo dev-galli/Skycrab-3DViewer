@@ -70,3 +70,101 @@ body {
     data-speed="0.7";
     data-speed="clamp(0.7)";
 }
+
+#debug-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-family: 'Roboto Mono', monospace;
+    color: #00ff88;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #00ff8855;
+    backdrop-filter: blur(5px);
+    display: block;
+    z-index: 1000;
+    min-width: 300px;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.debug-title {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #00ff88;
+    border-bottom: 1px solid #00ff8855;
+    padding-bottom: 5px;
+}
+
+.controls-section {
+    margin-bottom: 20px;
+}
+
+.control-group {
+    margin-bottom: 12px;
+}
+
+.control-group label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #00ffcc;
+}
+
+.slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-row input[type="range"] {
+    flex: 1;
+    height: 4px;
+    background: #00ff8855;
+    border-radius: 2px;
+    appearance: none;
+    outline: none;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #00ff88;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.value-display {
+    min-width: 50px;
+    font-size: 11px;
+    text-align: right;
+}
+
+.info-header {
+    margin-top: 10px;
+    color: #00ffcc;
+    font-size: 12px;
+}
+
+.info-row {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.copy-button {
+    background: #00ff88;
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 11px;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.copy-button:hover {
+    background: #00cc6f;
+}

@@ -49,12 +49,29 @@ export function setupModelLoader(scene) {
                         child.receiveShadow = true;
                     }
                 });
+                // 1. Scala il modello per evitare che sia gigante
+                fbx.scale.set(0.01, 0.01, 0.01); // PROVA questo valore, eventualmente modificalo
+                // Converti gradi in radianti
+                fbx.rotation.y = THREE.MathUtils.degToRad(140); // Rotazione di 45 gradi
+
+                // 2. Centra il modello sul piano
+                // Calcola bounding box del modello
+                const box = new THREE.Box3().setFromObject(fbx);
+                const size = new THREE.Vector3();
+                const center = new THREE.Vector3();
+                box.getSize(size);
+                box.getCenter(center);
+
+                // Sposta il modello affinché la base tocchi y=0 (il piano)
+                const yOffset = box.min.y;  // quanto sotto lo zero va la mesh
+                fbx.position.y -= yOffset;
                 scene.add(fbx);
                 resolve(fbx);
             },
             undefined,
             error => reject(error)
         );
+
     });
 }
 
